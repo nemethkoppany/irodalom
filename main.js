@@ -136,31 +136,14 @@ form.addEventListener("submit",function(e){//Adunk a form-nak egy eseménykezel�
 
     let valid = true;//A valid értéke true
 
-    if(!simpleValidation(author, "A költő nevének megadása kötelező!")){//Hogyha az egyszerű validációs függvényben a visszatérési érték hamis akkor adjon hibaüzenete
-        valid = false;//Legyen a valid értéke false
-    }
-    if(!simpleValidation(era,"A korszak megadása kötelező!")){//Hogyha az egyszerű validációs függvényben a visszatérési érték hamis akkor adjon hibaüzenete
-        valid = false;//Legyen a valid értéke false
-    }
+ 
 
 
     if(!loveCheckbox.checked){//Hogya nincs bepipálva a "volt másik szerelme?" akkor 
         love2Value = ""; //Törölje ki bármi is van írva a második szerelem mezőbe
     }
-    if(loveCheckbox.checked && love1Value === "" && love2Value === ""){//Hogyha be van pipálva a checkbox, de nincs kitöltve egyik szerelem sem a
-        simpleValidation(love1, "A költőnek kötelező megadni a szerelmeit");//Adjon hibaüzenetet mind a kettő bemeneti mezőhöz
-        simpleValidation(love2, "A költőnek kötelező megadni a szerelmeit");//Adjon hibaüzenetet mind a kettő bemeneti mezőhöz
-        valid = false;//És legyen a valid értéke false
-    }
-    if(loveCheckbox.checked && love1Value === "" && love2Value !== ""){//Hogyha be van pipálva, de csak a második szerelemhez van írva valami
-        simpleValidation(love1, "Biztos jó helyre írtad a szerelmet ha csak egy van neki?");//Adjon hibaüzenetet
-        valid = false;//És legyen a valid értéke false
-    }
-    if(loveCheckbox.checked && love1Value !== "" && love2Value === ""){//Ha be van pipálva, de csak az első-höz van írva valami(az úgy furán néz ki ha nincs a másodikhoz is írva valami)
-        simpleValidation(love2,"Meg kell adni a másik szerelmet is ha ki van pipálva");//Akkor írjon ki hibaüzenetet
-        valid = false;//És legyen a valid értéke false
-    }
-    if(valid){//Hogyha a valid továbbra is true
+
+    if(SimpleValidation(author,era) &&complexValidation(love1,love2,loveCheckbox)){//Ha a függvények igaz értékkel térnek vissza
     const newElement = {//Készítünk ezekkel az értékekkel egy új objektumot
         author: authorValue,//tulajdonságnak értékadás
         era: eraValue,//tulajdonságnak értékadás
@@ -185,4 +168,32 @@ function simpleValidation(input,errormsg){//egyszerű validációs függvény, p
         valid = false;//Legyen a valid értéke false
     }
     return valid;//Térjen vissza a validdal
+}
+
+function SimpleValidation(author, era){//függvény az egyszerű validálás kezelésére
+    let valid = true;//A valid értéke igaz
+    if(!simpleValidation(author, "A költő nevének megadása kötelező!")){//Hogyha az egyszerű validációs függvényben a visszatérési érték hamis akkor adjon hibaüzenete
+        valid = false;//Legyen a valid értéke false
+    }
+    if(!simpleValidation(era,"A korszak megadása kötelező!")){//Hogyha az egyszerű validációs függvényben a visszatérési érték hamis akkor adjon hibaüzenete
+        valid = false;//Legyen a valid értéke false
+    }
+    return valid;//Térjen vissza a validdal
+}
+function complexValidation(love1,love2,loveCheckbox){//Összetett validáció függvénybe szervezése
+    let valid = true;//A valid értéke igaz
+    if(loveCheckbox.checked && love1.value === "" && love2.value === ""){//Hogyha be van pipálva a checkbox, de nincs kitöltve egyik szerelem sem a
+        simpleValidation(love1, "A költőnek kötelező megadni a szerelmeit");//Adjon hibaüzenetet mind a kettő bemeneti mezőhöz
+        simpleValidation(love2, "A költőnek kötelező megadni a szerelmeit");//Adjon hibaüzenetet mind a kettő bemeneti mezőhöz
+        valid = false;//És legyen a valid értéke false
+    }
+    if(loveCheckbox.checked && love1.value === "" && love2.value !== ""){//Hogyha be van pipálva, de csak a második szerelemhez van írva valami
+        simpleValidation(love1, "Biztos jó helyre írtad a szerelmet ha csak egy van neki?");//Adjon hibaüzenetet
+        valid = false;//És legyen a valid értéke false
+    }
+    if(loveCheckbox.checked && love1.value !== "" && love2.value === ""){//Ha be van pipálva, de csak az első-höz van írva valami(az úgy furán néz ki ha nincs a másodikhoz is írva valami)
+        simpleValidation(love2,"Meg kell adni a másik szerelmet is ha ki van pipálva");//Akkor írjon ki hibaüzenetet
+        valid = false;//És legyen a valid értéke false
+    }
+    return valid;//Térjen vissza a valid értékekel
 }
