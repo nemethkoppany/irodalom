@@ -102,8 +102,12 @@ function tableMakerFunction(){
         }
         else{//Máskülönben
             love_td.colSpan = 2;//az első szerelmi cellával vonja össze az utáni cellát
+            love_td.style.textAlign = "center";//És igazítsa középre a szöveget
         }
-       
+       if(!irodalom.love1 && !irodalom.love2 ){//Hogyha egyik szerelem sincs megadva
+        love_td.innerHTML = "-";//Csak egy - szerepeljen a szerelmek helyén
+        love_td.style.textAlign = "center";//És azt igazítsa középre
+       }
     }
 }
 tableMakerFunction();//Függvény meghívás
@@ -116,14 +120,44 @@ form.addEventListener("submit",function(e){//Adunk a form-nak egy eseménykezel�
     const era = document.getElementById("korszak");//Lekérjük id alapján az elemeket
     const love1 = document.getElementById("szerelem1");//Lekérjük id alapján az elemeket
     const love2 = document.getElementById("szerelem2");//Lekérjük id alapján az elemeket
-
     const loveCheckbox = document.getElementById("masodik");//Lekérjük id alapján az elemeket
 
     const authorValue = author.value;//Azoknak az elemeknek az értékét külön változóba tároljuk
     const eraValue = era.value;//Azoknak az elemeknek az értékét külön változóba tároljuk
     const love1Value = love1.value;//Azoknak az elemeknek az értékét külön változóba tároljuk
-    const love2Value = love2.value;//Azoknak az elemeknek az értékét külön változóba tároljuk
+    let love2Value = love2.value;//Azoknak az elemeknek az értékét külön változóba tároljuk
 
+    const thisForm = e.currentTarget;//Eltűroljuk a változóban az ebben a form-ban tárolt elemeket
+    const error = thisForm.querySelectorAll(".error");//Megkeressük az error class-okat
+    for(const err of error){//Végigjárunk azokon az elemeken amiknek van error class-a
+        err.innerHTML = "";//És kitöröljük azt ami bele volt írva, ha volt benne valami
+    }
+
+    let valid = true;//A valid értéke true
+
+    if(authorValue === ""){//Ha nincs semmi írva a mezőbe 
+        const parentElement = author.parentElement;//eltároljuk az author parentElementjét egy másik változóban
+        const errorPlace = parentElement.querySelector(".error");//Megkeressük az error class-okat
+        if(errorPlace !== undefined){//Ha van error class-al ellátott elem
+            errorPlace.innerHTML = "A szerző nevének megadása kötelező";//Akkor oda írjon hibaüzenetet
+        }
+        valid = false;//Legyne a valid értéke false
+    }
+    if(eraValue === ""){//Ha nincs semmi írva a mezőbe 
+        const parentElement = era.parentElement;//eltároljuk az author parentElementjét egy másik változóban
+        const errorPlace = parentElement.querySelector(".error");//Megkeressük az error class-okat
+        if(errorPlace !== undefined){//Ha van error class-al ellátott elem
+            errorPlace.innerHTML = "A korszak megadása kötelező"//Akkor oda írjon hibaüzenetet
+        }
+        valid = false;//Legyen a valid értéke false
+    }
+
+
+    if(!loveCheckbox.checked){//Hogya nincs bepipálva a "volt másik szerelme?" akkor 
+        love2Value = ""; //Törölje ki bármi is van írva a második szerelem mezőbe
+    }
+  
+    if(valid){//Hogyha a valid továbbra is true
     const newElement = {//Készítünk ezekkel az értékekkel egy új objektumot
         author: authorValue,//tulajdonságnak értékadás
         era: eraValue,//tulajdonságnak értékadás
@@ -132,5 +166,7 @@ form.addEventListener("submit",function(e){//Adunk a form-nak egy eseménykezel�
     }
     irodalomArray.push(newElement);//Hozzárakjuk a tömbhöz
     tbody.innerHTML = "";//Lenullázzuk a tábla tartalmát 
+    form.reset();
     tableMakerFunction();//Meghívjük a függvényt
+}
 })
