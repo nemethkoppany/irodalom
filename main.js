@@ -55,7 +55,11 @@ colgroup.appendChild(col4);//Hozzárendeljük a colgroup elemhez
 
 const thead = document.createElement("thead");//Készítünk egy thead elemet
 table.appendChild(thead);//Amit hozzárendelünk a table-höz
-
+/**
+ * Fejléc készítős függvény
+ * Végigmegyünk az objektumon és annyi cellát készítünk ahány értéke van az objektumnak
+ * Valamint ha a cellagenerálás a "Szerelmek"-hez ér vonja össze a cellákat, hogy egyik szerelem se lógjon ki
+ */
 function headerMakerFunction(){//Fejléckészytő függvény
     const thead_tr = document.createElement("tr");//Készyt egy sort
     thead.appendChild(thead_tr);//Amit hozzárak a thead-hez
@@ -74,7 +78,12 @@ headerMakerFunction();//Hívjuk meg a headerMakerFunction() függvényt
 
 const tbody = document.createElement("tbody");//Készítünk egy tbody elemet
 table.appendChild(tbody);//Hozzáadjuk a table-höz
-
+/**
+ * tábla készítése
+ * Végigmegyünk a tömbön amiben az információ van
+ * ezeket berendezzük cellákba és elágazással kezeljük ha esetleg nincs mindenhol ugyan annyi adat 
+ * @param {array} array//Típus megadás  
+ */
 function tableMakerFunction(array){//Táblagenerálós függvény egy paraméterrel
     for(const irodalom of array ){//Végigmegyünk a tömbbön
         const tbody_tr = document.createElement("tr");//Csinálunk egy sort
@@ -111,7 +120,7 @@ function tableMakerFunction(array){//Táblagenerálós függvény egy paraméter
     }
 }
 tableMakerFunction(irodalomArray);//Függvény meghívás
-FormMakerFunction();
+FormMakerFunction();//függvény meghívása
 
 form.addEventListener("submit",function(e){//Adunk a form-nak egy eseménykezelőt
     e.preventDefault();//Ezzel megakadályozzuk, hogy alapértelmezetten lefusson a hozzáadás amikor betölt az oldal
@@ -150,7 +159,16 @@ form.addEventListener("submit",function(e){//Adunk a form-nak egy eseménykezel�
     tableMakerFunction(irodalomArray);//Meghívjük a függvényt
 }
 })
-
+/**
+ * Az egyszerű validáció logikája
+ * Ha valamelyik bemeneti mezőnél nincs semmi írva
+ * megkeresi annak a parentelementjéz
+ * Megnézi, hogy van a error class
+ * Ha van akkor oda írja majd a hibaüzenete
+ * @param {HTMLInputElement} input //Típus megadás 
+ * @param {String} errormsg //Típus megadás 
+ * @returns {boolean}//Típus megadás 
+ */
 function simpleValidation(input,errormsg){//egyszerű validációs függvény, paraméterekkel
     let valid = true;//A valid értéke igaz
     if(input.value === ""){//Ha nincs semmi írva a mezőbe 
@@ -163,7 +181,13 @@ function simpleValidation(input,errormsg){//egyszerű validációs függvény, p
     }
     return valid;//Térjen vissza a validdal
 }
-
+/**
+ * Egyszerű validáció
+ * Ha bármelyik függvényhívás hamis értékkel tér vissza hibaüzenetet dob
+ * @param {HTMLInputElement} author //Típus megadás 
+ * @param {HTMLInputElement} era //Típus megadás 
+ * @returns {boolean}//Típus megadás 
+ */
 function SimpleValidation(author, era){//függvény az egyszerű validálás kezelésére
     let valid = true;//A valid értéke igaz
     if(!simpleValidation(author, "A költő nevének megadása kötelező!")){//Hogyha az egyszerű validációs függvényben a visszatérési érték hamis akkor adjon hibaüzenete
@@ -174,6 +198,14 @@ function SimpleValidation(author, era){//függvény az egyszerű validálás kez
     }
     return valid;//Térjen vissza a validdal
 }
+/**
+ * Összetett validáció
+ * Ha be van pipálva a checkbox, de vagy az egyik szerelem vagy a másik, vagy egyik sincs kitöltve akkor hibaüzenetet dob 
+ * @param {HTMLElement} love1//Típus megadás 
+ * @param {HTMLElement} love2 //Típus megadás
+ * @param {HTMLInputElement} loveCheckbox //Típus megadás
+ * @returns {boolean}//Típus megadás
+ */
 function complexValidation(love1,love2,loveCheckbox){//Összetett validáció függvénybe szervezése
     let valid = true;//A valid értéke igaz
     if(loveCheckbox.checked && love1.value === "" && love2.value === ""){//Hogyha be van pipálva a checkbox, de nincs kitöltve egyik szerelem sem a
@@ -191,7 +223,18 @@ function complexValidation(love1,love2,loveCheckbox){//Összetett validáció f�
     }
     return valid;//Térjen vissza a valid értékekel
 }
-
+/**
+ * Az űrlap szükséges elemeit készíti el
+ * készít div-et amiben el van tárolva az egész
+ * a hely ahová a bemeneti mezőhöz kell adni szöveget, azt itt adjuk meg
+ * A bemeneti mezőt itt készítjük el
+ * És minden hozzárendelünk a div-hez
+ * @param {HTMLElement} parent //Típus megadás
+ * @param {string} type //Típus megadás
+ * @param {string} innerHTML //Típus megadás
+ * @param {string} nameID //Típus megadás
+ * @returns {HTMLElement}//Típus megadás
+ */
 function CreateInput(parent,type,innerHTML,nameID ){//a formhoz szükséges elemeket készytő függvény
     const div = document.createElement("div");//Készítünk egy div elemet
     div.className = "field";//Adunk neki egy class-t
@@ -217,6 +260,11 @@ function CreateInput(parent,type,innerHTML,nameID ){//a formhoz szükséges elem
     div.appendChild(errorDiv);//Hozzárendeljük a div-hez
     return div;
 }
+/**
+ * Összeállítja a függvényt
+ * formot készít és megtölti azt a másik függvényben készített elemekkel
+ * majd készít egy gombot is
+ */
 function FormMakerFunction(){//Az űrlap összeállítására szolgáló űrlap
     const form = document.createElement("form")//form létrehozása
     form.id = "form"//form id-jének megadása
