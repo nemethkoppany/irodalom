@@ -108,6 +108,7 @@ function tableMakerFunction(){
         love_td.innerHTML = "-";//Csak egy - szerepeljen a szerelmek helyén
         love_td.style.textAlign = "center";//És azt igazítsa középre
        }
+      
     }
 }
 tableMakerFunction();//Függvény meghívás
@@ -146,7 +147,19 @@ form.addEventListener("submit",function(e){//Adunk a form-nak egy eseménykezel�
     if(!loveCheckbox.checked){//Hogya nincs bepipálva a "volt másik szerelme?" akkor 
         love2Value = ""; //Törölje ki bármi is van írva a második szerelem mezőbe
     }
-  
+    if(loveCheckbox.checked && love1Value === "" && love2Value === ""){//Hogyha be van pipálva a checkbox, de nincs kitöltve egyik szerelem sem a
+        simpleValidation(love1, "A költőnek kötelező megadni a szerelmeit");//Adjon hibaüzenetet mind a kettő bemeneti mezőhöz
+        simpleValidation(love2, "A költőnek kötelező megadni a szerelmeit");//Adjon hibaüzenetet mind a kettő bemeneti mezőhöz
+        valid = false;//És legyen a valid értéke false
+    }
+    if(loveCheckbox.checked && love1Value === "" && love2Value !== ""){//Hogyha be van pipálva, de csak a második szerelemhez van írva valami
+        simpleValidation(love1, "Biztos jó helyre írtad a szerelmet ha csak egy van neki?");//Adjon hibaüzenetet
+        valid = false;//És legyen a valid értéke false
+    }
+    if(loveCheckbox.checked && love1Value !== "" && love2Value === ""){//Ha be van pipálva, de csak az első-höz van írva valami(az úgy furán néz ki ha nincs a másodikhoz is írva valami)
+        simpleValidation(love2,"Meg kell adni a másik szerelmet is ha ki van pipálva");//Akkor írjon ki hibaüzenetet
+        valid = false;//És legyen a valid értéke false
+    }
     if(valid){//Hogyha a valid továbbra is true
     const newElement = {//Készítünk ezekkel az értékekkel egy új objektumot
         author: authorValue,//tulajdonságnak értékadás
