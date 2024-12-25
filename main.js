@@ -111,8 +111,8 @@ function tableMakerFunction(array){//Táblagenerálós függvény egy paraméter
     }
 }
 tableMakerFunction(irodalomArray);//Függvény meghívás
+FormMakerFunction();
 
-const form = document.getElementById("form");//Lekérjük id alapján a formot
 form.addEventListener("submit",function(e){//Adunk a form-nak egy eseménykezelőt
     e.preventDefault();//Ezzel megakadályozzuk, hogy alapértelmezetten lefusson a hozzáadás amikor betölt az oldal
 
@@ -190,4 +190,48 @@ function complexValidation(love1,love2,loveCheckbox){//Összetett validáció f�
         valid = false;//És legyen a valid értéke false
     }
     return valid;//Térjen vissza a valid értékekel
+}
+
+function CreateInput(parent,type,innerHTML,nameID ){//a formhoz szükséges elemeket készytő függvény
+    const div = document.createElement("div");//Készítünk egy div elemet
+    div.className = "field";//Adunk neki egy class-t
+
+    const label = document.createElement("label");//Készítünk egy label elemet
+    label.htmlFor = nameID;//A label forjának megadása
+    label.innerHTML = innerHTML;//Mi lesz a bemeneti mező mellé írva
+
+    const input = document.createElement("input")//input elemet létrehozzuk
+    input.type = type;//input típusának megadása
+    input.id = nameID;//input id-jének megadása
+    input.name = nameID;//input name-jének megadása
+
+    const errorDiv = document.createElement("div")//div létrehozása
+    errorDiv.classList.add("error")//div class-ának megadása
+
+    parent.appendChild(div);//Hozzárendeljük a parent-hez
+    div.appendChild(label);//Hozzárendeljük a div-hez
+    div.appendChild(document.createElement("br"));//Hozzárendelünk a div-hez egy break pointot
+    div.appendChild(input);//Hozzárendeljük a div-hez
+    div.appendChild(document.createElement("br"));//Hozzárendelünk a div-hez egy break pointot
+    div.appendChild(document.createElement("br"));//Hozzárendelünk a div-hez egy break pointot
+    div.appendChild(errorDiv);//Hozzárendeljük a div-hez
+    return div;
+}
+function FormMakerFunction(){//Az űrlap összeállítására szolgáló űrlap
+    const form = document.createElement("form")//form létrehozása
+    form.id = "form"//form id-jének megadása
+    document.body.appendChild(form)//Hozzárakjuk a body-hoz
+
+    form.append(//formhoz hozzáadás
+        CreateInput(form,"text","Költö neve:","kolto_nev"),//A bemeneti mezőket
+        CreateInput(form,"text","korszak:","korszak"),//A bemeneti mezőket
+        CreateInput(form,"text","Szerelme:","szerelem1"),//A bemeneti mezőket
+        CreateInput(form,"checkbox","Volt másik szerelem?","masodik"),//A checkboxot
+        CreateInput(form,"text","Szerelme:","szerelem2")//A bemeneti mezőket
+    )
+
+    const button = document.createElement("button")//gomb létrehozása
+    button.type = "submit"//gomb típusának megadása
+    button.innerHTML = "Hozzáadás"//gomb szövegének megadása
+    form.appendChild(button)//Hozzárendeljük a formhoz
 }
