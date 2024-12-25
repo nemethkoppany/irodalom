@@ -135,20 +135,10 @@ form.addEventListener("submit",function(e){//Adunk a form-nak egy eseménykezel�
 
     let valid = true;//A valid értéke true
 
-    if(authorValue === ""){//Ha nincs semmi írva a mezőbe 
-        const parentElement = author.parentElement;//eltároljuk az author parentElementjét egy másik változóban
-        const errorPlace = parentElement.querySelector(".error");//Megkeressük az error class-okat
-        if(errorPlace !== undefined){//Ha van error class-al ellátott elem
-            errorPlace.innerHTML = "A szerző nevének megadása kötelező";//Akkor oda írjon hibaüzenetet
-        }
-        valid = false;//Legyne a valid értéke false
+    if(!simpleValidation(author, "A költő nevének megadása kötelező!")){//Hogyha az egyszerű validációs függvényben a visszatérési érték hamis akkor adjon hibaüzenete
+        valid = false;//Legyen a valid értéke false
     }
-    if(eraValue === ""){//Ha nincs semmi írva a mezőbe 
-        const parentElement = era.parentElement;//eltároljuk az author parentElementjét egy másik változóban
-        const errorPlace = parentElement.querySelector(".error");//Megkeressük az error class-okat
-        if(errorPlace !== undefined){//Ha van error class-al ellátott elem
-            errorPlace.innerHTML = "A korszak megadása kötelező"//Akkor oda írjon hibaüzenetet
-        }
+    if(!simpleValidation(era,"A korszak megadása kötelező!")){//Hogyha az egyszerű validációs függvényben a visszatérési érték hamis akkor adjon hibaüzenete
         valid = false;//Legyen a valid értéke false
     }
 
@@ -166,7 +156,20 @@ form.addEventListener("submit",function(e){//Adunk a form-nak egy eseménykezel�
     }
     irodalomArray.push(newElement);//Hozzárakjuk a tömbhöz
     tbody.innerHTML = "";//Lenullázzuk a tábla tartalmát 
-    form.reset();
+    form.reset();//Töröljön ki mindent az űrlap bemeneti mezőiből
     tableMakerFunction();//Meghívjük a függvényt
 }
 })
+
+function simpleValidation(input,errormsg){//egyszerű validációs függvény, paraméterekkel
+    let valid = true;//A valid értéke igaz
+    if(input.value === ""){//Ha nincs semmi írva a mezőbe 
+        const parentElement = input.parentElement;//eltároljuk az bemeneti mező parentElementjét egy másik változóban
+        const errorPlace = parentElement.querySelector(".error");//Megkeressük az error class-okat
+        if(errorPlace !== undefined){//Ha van error class-al ellátott elem
+            errorPlace.innerHTML = errormsg;//Akkor oda írjon hibaüzenetet
+        }
+        valid = false;//Legyen a valid értéke false
+    }
+    return valid;//Térjen vissza a validdal
+}
