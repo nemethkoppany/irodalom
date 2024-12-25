@@ -56,20 +56,21 @@ colgroup.appendChild(col4);//Hozzárendeljük a colgroup elemhez
 const thead = document.createElement("thead");//Készítünk egy thead elemet
 table.appendChild(thead);//Amit hozzárendelünk a table-höz
 
-const thead_tr = document.createElement("tr");//Csinálunk egy sort
-thead.appendChild(thead_tr);//A thead-en belül
+function headerMakerFunction(){//Fejléckészytő függvény
+    const thead_tr = document.createElement("tr");//Készyt egy sort
+    thead.appendChild(thead_tr);//Amit hozzárak a thead-hez
 
-const  author_th = document.createElement("th");//Csinálunk egy cellát 
-author_th.innerHTML = header.author;//Megadjuk a cella tartalmát 
-thead_tr.appendChild(author_th);//Hozzárakjuk a sorhoz
+    for(const head of Object.values(header)){//Végigmegy a headser objektum tulajdonságainak értékein
+        const th = document.createElement("th");//Készyt egy cellát
+        th.innerHTML = head;//Amiben az aktuális érték lesz
+        thead_tr.appendChild(th);//És hozzárakja a thead_tr-hez
 
-const era_th = document.createElement("th");//Csinálunk egy cellát 
-era_th.innerHTML = header.era;//Megadjuk a cella tartalmát 
-thead_tr.appendChild(era_th);//Hozzárakjuk a sorhoz
-
-const love_th = document.createElement("th");//Csinálunk egy cellát 
-love_th.innerHTML = header.love;//Megadjuk a cella tartalmát 
-thead_tr.appendChild(love_th);//Hozzárakjuk a sorhoz
+        if(head == "Szerelmek"){//Ha a változó ami végigmegy az értékeken egyenlő lesz a "Szerelmek"-el
+            th.colSpan = "2";//Vonja össze a sorokat
+        }
+    }
+}
+headerMakerFunction();//Hívjuk meg a headerMakerFunction() függvényt
 
 const tbody = document.createElement("tbody");//Készítünk egy tbody elemet
 table.appendChild(tbody);//Hozzáadjuk a table-höz
@@ -92,8 +93,6 @@ function tableMakerFunction(){
         tbody_tr.appendChild(love_td);//Hozzárakjuk a sorhoz
 
         if(irodalom.love2){//Hogyha van második szerelem
-            
-            love_th.colSpan = "2";//Vonja össze a szerelem fejléc utáni cellákat
             const love2_td = document.createElement("td");//Csinálunk egy cellát 
             love2_td.innerHTML = irodalom.love2;//Megadjuk a cella tartalmát 
             tbody_tr.appendChild(love2_td);//Hozzárakjuk a sorhoz
