@@ -75,8 +75,8 @@ headerMakerFunction();//Hívjuk meg a headerMakerFunction() függvényt
 const tbody = document.createElement("tbody");//Készítünk egy tbody elemet
 table.appendChild(tbody);//Hozzáadjuk a table-höz
 
-function tableMakerFunction(){
-    for(const irodalom of irodalomArray ){//Végigmegyünk a tömbbön
+function tableMakerFunction(array){//Táblagenerálós függvény egy paraméterrel
+    for(const irodalom of array ){//Végigmegyünk a tömbbön
         const tbody_tr = document.createElement("tr");//Csinálunk egy sort
         tbody.appendChild(tbody_tr);//A tbody-n belül
 
@@ -110,7 +110,7 @@ function tableMakerFunction(){
       
     }
 }
-tableMakerFunction();//Függvény meghívás
+tableMakerFunction(irodalomArray);//Függvény meghívás
 
 const form = document.getElementById("form");//Lekérjük id alapján a formot
 form.addEventListener("submit",function(e){//Adunk a form-nak egy eseménykezelőt
@@ -133,11 +133,6 @@ form.addEventListener("submit",function(e){//Adunk a form-nak egy eseménykezel�
         err.innerHTML = "";//És kitöröljük azt ami bele volt írva, ha volt benne valami
     }
 
-    let valid = true;//A valid értéke true
-
- 
-
-
     if(!loveCheckbox.checked){//Hogya nincs bepipálva a "volt másik szerelme?" akkor 
         love2Value = ""; //Törölje ki bármi is van írva a második szerelem mezőbe
     }
@@ -152,7 +147,7 @@ form.addEventListener("submit",function(e){//Adunk a form-nak egy eseménykezel�
     irodalomArray.push(newElement);//Hozzárakjuk a tömbhöz
     tbody.innerHTML = "";//Lenullázzuk a tábla tartalmát 
     form.reset();//Töröljön ki mindent az űrlap bemeneti mezőiből
-    tableMakerFunction();//Meghívjük a függvényt
+    tableMakerFunction(irodalomArray);//Meghívjük a függvényt
 }
 })
 
